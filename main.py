@@ -8,5 +8,5 @@ for num in numbers:
         zero.append(num)
     else:
         no_zero.append(num)
-print(no_zero)
-print(zero)
+result = no_zero + zero
+print(result)
