@@ -1,7 +1,7 @@
 import string
 
 input_string = input("Enter a string: ")
-start, end = input_string.split('-')  # Розбиваємо на початок і кінець
+start, end = input_string.split('-')
 
 letters = string.ascii_letters
 start_idx = letters.index(start)
