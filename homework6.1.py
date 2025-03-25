@@ -1,10 +1,11 @@
-number = int(input("Enter a number: "))
-result = number
+import string
 
-while result > 9:
-    temp = 1
-    for numeral in str(result):
-        temp *= int(numeral)
-        result = temp
-    print(result)
-print("Finish result:", result)
+input_string = input("Enter a string: ")
+start, end = input_string.split('-')
+
+letters = string.ascii_letters
+start_idx = letters.index(start)
+end_idx = letters.index(end)
+
+result = letters[start_idx:end_idx + 1]
+print(result)
