@@ -40,7 +40,6 @@ class Purchase:
         return result.strip()
 
 
-# Тестування
 lemon = Item('lemon', 5, "yellow", "small")
 apple = Item('apple', 2, "red", "middle")
 
