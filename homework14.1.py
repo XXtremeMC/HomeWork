@@ -1,0 +1,93 @@
+class Human:
+
+    def __init__(self, gender, age, first_name, last_name):
+        self.gender = gender
+        self.age = age
+        self.first_name = first_name
+        self.last_name = last_name
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}, {self.gender}, {self.age} y.o."
+
+
+class Student(Human):
+
+    def __init__(self, gender, age, first_name, last_name, record_book):
+        super().__init__(gender, age, first_name, last_name)
+        self.record_book = record_book
+
+    def __str__(self):
+        return f"{super().__str__()} | Record Book: {self.record_book}"
+
+    def __eq__(self, other):
+        if not isinstance(other, Student):
+            return False
+        return self.last_name == other.last_name and self.record_book == other.record_book
+
+    def __hash__(self):
+        return hash((self.last_name, self.record_book))
+
+
+# Створюємо свій виняток
+class TooManyStudentsError(Exception):
+    pass
+
+
+class Group:
+
+    def __init__(self, number):
+        self.number = number
+        self.group = set()
+
+    def add_student(self, student):
+        if len(self.group) >= 10:
+            raise TooManyStudentsError("У групі не може бути більше 10 студентів.")
+        if isinstance(student, Student):
+            self.group.add(student)
+
+    def find_student(self, last_name):
+        for student in self.group:
+            if student.last_name == last_name:
+                return student
+        return None
+
+    def delete_student(self, last_name):
+        student = self.find_student(last_name)
+        if student:
+            self.group.remove(student)
+
+    def __str__(self):
+        all_students = '\n'.join(str(s) for s in self.group)
+        return f'Group Number: {self.number}\n{all_students if all_students else "No students"}'
+
+
+# --- Тестування ---
+st1 = Student('Male', 30, 'Steve', 'Jobs', 'AN142')
+st2 = Student('Female', 25, 'Liza', 'Taylor', 'AN145')
+gr = Group('PD1')
+gr.add_student(st1)
+gr.add_student(st2)
+print(gr)
+
+assert str(gr.find_student('Jobs')) == str(st1), 'Test1'
+assert gr.find_student('Jobs2') is None, 'Test2'
+assert isinstance(gr.find_student('Jobs'), Student) is True, 'Метод поиска должен возвращать экземпляр'
+
+gr.delete_student('Taylor')
+print(gr)  # Only one student
+
+gr.delete_student('Taylor')  # No error!
+
+gr = Group('PD1')
+
+# додаємо 10 студентів
+for i in range(10):
+    gr.add_student(Student('Male', 20 + i, f'Name{i}', f'Last{i}', f'RB{i}'))
+
+# пробуємо додати 11-го
+try:
+    gr.add_student(Student('Male', 22, 'Max', 'Payne', 'RB999'))
+except TooManyStudentsError as e:
+    print("\nПомилка:", e)
+
+
